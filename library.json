@@ -1,17 +1,17 @@
 {
   "name" : "kbide-plugin-ds1307-real-time-clock-module",
-  "title": "ds1307-real-time-clock-module",
+  "title": "DS1307 Real-Time Clock Module",
   "keywords": "ds1307-real-time-clock-module, esp32, esp8266, arduino",
   "description": "ds1307-real-time-clock-module plugin for KB-IDE",
   "category":"",
   "git": "https://github.com/cmmc-kbide/kbide-plugin-ds1307-real-time-clock-module/",
-  "author": "cmmakerclub",
+  "author": "Prawared",
   "email": "",
   "url": "https://github.com/cmmc-kbide/kbide-plugin-ds1307-real-time-clock-module/",
   "version": "1.0.0",
   "board" : "",
   "platform": ["arduino-esp32"],
   "license": "",
-  "image" : "/static/display.png",
+  "image" : "/static/display.jpg",
   "homepage": "http://www.kbide.org"
 }
