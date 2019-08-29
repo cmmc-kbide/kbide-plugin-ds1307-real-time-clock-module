@@ -5,7 +5,7 @@
   "description": "ds1307-real-time-clock-module plugin for KB-IDE",
   "category":"",
   "git": "https://github.com/cmmc-kbide/kbide-plugin-ds1307-real-time-clock-module/",
-  "author": "cmmakerclub",
+  "author": "Prawared",
   "email": "",
   "url": "https://github.com/cmmc-kbide/kbide-plugin-ds1307-real-time-clock-module/",
   "version": "1.0.0",

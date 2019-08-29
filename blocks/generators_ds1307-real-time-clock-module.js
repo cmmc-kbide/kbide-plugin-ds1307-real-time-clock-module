@@ -19,6 +19,7 @@ RtcDS1307<TwoWire> Rtc(Wire);
 #FUNCTION
 void printDateTime(const RtcDateTime& dt)
 {
+
     // char datestring[20];
 
     // snprintf_P(datestring, 
