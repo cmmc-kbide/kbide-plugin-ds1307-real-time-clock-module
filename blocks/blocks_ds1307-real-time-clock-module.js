@@ -37,30 +37,6 @@ Blockly.Blocks['rtc_timestamp_format'] = {
   }
 };
 
-Blockly.Blocks['rtc_get_date'] = {
-  init: function() {
-    this.appendDummyInput()
-        .appendField(new Blockly.FieldVariable("RTC1", null, ["Plugin.RTC"], ["Plugin.RTC"]), "RTC_INSTANCE")
-        .appendField("GET DATE - YYYY/MM/DD");
-    this.setOutput(true, null);
-    this.setColour(120);
- this.setTooltip("");
- this.setHelpUrl("");
-  }
-};
-
-Blockly.Blocks['rtc_get_timestamp'] = {
-  init: function() {
-    this.appendDummyInput()
-        .appendField(new Blockly.FieldVariable("RTC1", null, ["Plugin.RTC"], ["Plugin.RTC"]), "RTC_INSTANCE")
-        .appendField("GET TIMESTAMP - YYYY/MM/DD H:i:s");
-    this.setOutput(true, null);
-    this.setColour(120);
- this.setTooltip("");
- this.setHelpUrl("");
-  }
-};
-
 Blockly.Blocks['rtc_get_year'] = {
   init: function() {
     this.appendDummyInput()

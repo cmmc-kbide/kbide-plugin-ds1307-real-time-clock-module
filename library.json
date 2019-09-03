@@ -8,7 +8,7 @@
   "author": "Prawared",
   "email": "prawared.bw@gmail.com",
   "url": "https://github.com/cmmc-kbide/kbide-plugin-ds1307-real-time-clock-module/",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "board" : "",
   "platform": ["arduino-esp32"],
   "license": "",

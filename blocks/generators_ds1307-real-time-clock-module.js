@@ -114,22 +114,6 @@ Blockly.JavaScript['rtc_timestamp_format'] = function(block) {
   return [code, Blockly.JavaScript.ORDER_NONE];
 };
 
-Blockly.JavaScript['rtc_get_date'] = function(block) {
-  var variable_rtc_variable = Blockly.JavaScript.variableDB_.getName(block.getFieldValue('RTC_INSTANCE'), Blockly.Variables.NAME_TYPE);
-  // TODO: Assemble JavaScript into code variable.
-  var code = ``;
-  // TODO: Change ORDER_NONE to the correct strength.
-  return [code, Blockly.JavaScript.ORDER_NONE];
-};
-
-Blockly.JavaScript['rtc_get_timestamp'] = function(block) {
-  var variable_rtc_variable = Blockly.JavaScript.variableDB_.getName(block.getFieldValue('RTC_INSTANCE'), Blockly.Variables.NAME_TYPE);
-  // TODO: Assemble JavaScript into code variable.
-  var code = '...';
-  // TODO: Change ORDER_NONE to the correct strength.
-  return [code, Blockly.JavaScript.ORDER_NONE];
-};
-
 Blockly.JavaScript['rtc_get_year'] = function(block) {
   var variable_rtc_variable = Blockly.JavaScript.variableDB_.getName(block.getFieldValue('RTC_INSTANCE'), Blockly.Variables.NAME_TYPE);
   // TODO: Assemble JavaScript into code variable.
