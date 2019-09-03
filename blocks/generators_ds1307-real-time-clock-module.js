@@ -1,127 +1,191 @@
-Blockly.JavaScript['ds1307_real_time_clock'] = function(block) {
-  var variable_ds1307_debug = Blockly.JavaScript.variableDB_.getName(block.getFieldValue('DS1307_DEBUG'), Blockly.Variables.NAME_TYPE);
-  var variable_ds1307_day = Blockly.JavaScript.variableDB_.getName(block.getFieldValue('DS1307_DAY'), Blockly.Variables.NAME_TYPE);
-  var variable_ds1307_month = Blockly.JavaScript.variableDB_.getName(block.getFieldValue('DS1307_MONTH'), Blockly.Variables.NAME_TYPE);
-  var variable_ds1307_year = Blockly.JavaScript.variableDB_.getName(block.getFieldValue('DS1307_YEAR'), Blockly.Variables.NAME_TYPE);
-  var variable_ds1307_hour = Blockly.JavaScript.variableDB_.getName(block.getFieldValue('DS1307_HOUR'), Blockly.Variables.NAME_TYPE);
-  var variable_ds1307_minute = Blockly.JavaScript.variableDB_.getName(block.getFieldValue('DS1307_MINUTE'), Blockly.Variables.NAME_TYPE);
-  var variable_ds1307_second = Blockly.JavaScript.variableDB_.getName(block.getFieldValue('DS1307_SECOND'), Blockly.Variables.NAME_TYPE);
+Blockly.JavaScript['rtc_begin'] = function(block) {
+  var variable_rtc_variable = Blockly.JavaScript.variableDB_.getName(block.getFieldValue('RTC_INSTANCE'), Blockly.Variables.NAME_TYPE);
   // TODO: Assemble JavaScript into code variable.
   var code = `
-
-#EXTINC
-#include <Wire.h>
-#include <RtcDS1307.h>
-RtcDS1307<TwoWire> Rtc(Wire);
-#define countof(a) (sizeof(a) / sizeof(a[0]))
-#END
-
-#FUNCTION
-void printDateTime(const RtcDateTime& dt)
-{
-
-    // char datestring[20];
-
-    // snprintf_P(datestring, 
-    //         countof(datestring),
-    //         PSTR("%02u/%02u/%04u %02u:%02u:%02u"),
-    //         dt.Month(),
-    //         dt.Day(),
-    //         dt.Year(),
-    //         dt.Hour(),
-    //         dt.Minute(),
-    //         dt.Second() );
-    // Serial.print(datestring);
-
-    ${variable_ds1307_day} = dt.Day();
-    ${variable_ds1307_month} = dt.Month();
-    ${variable_ds1307_year} = dt.Year();
-    ${variable_ds1307_hour} = dt.Hour();
-    ${variable_ds1307_minute} = dt.Minute();
-    ${variable_ds1307_second} = dt.Second();
-}
-#END
+#EXTINC#include <Wire.h> #END
+#EXTINC#include <RtcDS1307.h> #END
+#VARIABLERtcDS1307<TwoWire> ${variable_rtc_variable}(Wire); #END
 
 #SETUP
-    Rtc.Begin();
-    RtcDateTime compiled = RtcDateTime(__DATE__, __TIME__);
-    printDateTime(compiled);
-    
-    if (!Rtc.IsDateTimeValid()) 
-    {
-        if (Rtc.LastError() != 0)
-        {
-            // we have a communications error
-            // see https://www.arduino.cc/en/Reference/WireEndTransmission for 
-            // what the number means
-            ${variable_ds1307_debug} = Rtc.LastError();
-        }
-        else
-        {
-            // Common Causes:
-            //    1) first time you ran and the device wasn't running yet
-            //    2) the battery on the device is low or even missing
 
-            // Serial.println("RTC lost confidence in the DateTime!");
-            // following line sets the RTC to the date & time this sketch was compiled
-            // it will also reset the valid flag internally unless the Rtc device is
-            // having an issue
+  ${variable_rtc_variable}.Begin();
+  RtcDateTime ${variable_rtc_variable}_compiled = RtcDateTime(__DATE__, __TIME__);
+  // printDateTime(${variable_rtc_variable}_compiled);
 
-            Rtc.SetDateTime(compiled);
-        }
+  if (!${variable_rtc_variable}.IsDateTimeValid()) 
+  {
+    if (${variable_rtc_variable}.LastError() != 0)
+    {
+      
     }
+    else
+    {
+      ${variable_rtc_variable}.SetDateTime(${variable_rtc_variable}_compiled);
+    }
+  }
 
-    if (!Rtc.GetIsRunning())
-    {
-        // Serial.println("RTC was not actively running, starting now");
-        Rtc.SetIsRunning(true);
-    }
+  if (!${variable_rtc_variable}.GetIsRunning())
+  {
+    ${variable_rtc_variable}.SetIsRunning(true);
+  }
 
-    RtcDateTime now = Rtc.GetDateTime();
-    if (now < compiled) 
-    {
-        // Serial.println("RTC is older than compile time!  (Updating DateTime)");
-        Rtc.SetDateTime(compiled);
-    }
-    else if (now > compiled) 
-    {
-        // Serial.println("RTC is newer than compile time. (this is expected)");
-    }
-    else if (now == compiled) 
-    {
-        // Serial.println("RTC is the same as compile time! (not expected but all is fine)");
-    }
+  RtcDateTime ${variable_rtc_variable}_now = ${variable_rtc_variable}.GetDateTime();
+  if (${variable_rtc_variable}_now < ${variable_rtc_variable}_compiled) 
+  {
+    ${variable_rtc_variable}.SetDateTime(${variable_rtc_variable}_compiled);
+  }
+  else if (${variable_rtc_variable}_now > ${variable_rtc_variable}_compiled) 
+  {
+  
+  }
+  else if (${variable_rtc_variable}_now == ${variable_rtc_variable}_compiled) 
+  {
+  
+  }
+  
+  ${variable_rtc_variable}.SetSquareWavePin(DS1307SquareWaveOut_Low);
 
-    // never assume the Rtc was last configured by you, so
-    // just clear them to your needed state
-    Rtc.SetSquareWavePin(DS1307SquareWaveOut_Low); 
 #END
+`;
+  return code;
+};
 
+Blockly.JavaScript['rtc_sync'] = function(block) {
+  var variable_rtc_variable = Blockly.JavaScript.variableDB_.getName(block.getFieldValue('RTC_INSTANCE'), Blockly.Variables.NAME_TYPE);
+  // TODO: Assemble JavaScript into code variable.
+  return `
+  RtcDateTime ${variable_rtc_variable}_now = ${variable_rtc_variable}.GetDateTime();
 
-    if (!Rtc.IsDateTimeValid()) 
-    {
-        if (Rtc.LastError() != 0)
-        {
-            // we have a communications error
-            // see https://www.arduino.cc/en/Reference/WireEndTransmission for 
-            // what the number means
-            // Serial.print("RTC communications error = ");
-            // Serial.println(Rtc.LastError());
-            ${variable_ds1307_debug} = Rtc.LastError();
-        }
-        else
-        {
-            // Common Causes:
-            //    1) the battery on the device is low or even missing and the power line was disconnected
-            // Serial.println("RTC lost confidence in the DateTime!");
-        }
-    }
-
-    RtcDateTime now = Rtc.GetDateTime();
-
-    printDateTime(now);
-    // Serial.println();
+  char ${variable_rtc_variable}_format_year[5];
+  char ${variable_rtc_variable}_format_month[5];
+  char ${variable_rtc_variable}_format_day[5];
+  char ${variable_rtc_variable}_format_hour[5];
+  char ${variable_rtc_variable}_format_minute[5];
+  char ${variable_rtc_variable}_format_second[5];
+  
+  sprintf(${variable_rtc_variable}_format_year, "%02d", ${variable_rtc_variable}_now.Year());
+  sprintf(${variable_rtc_variable}_format_month, "%02d", ${variable_rtc_variable}_now.Month());
+  sprintf(${variable_rtc_variable}_format_day, "%02d", ${variable_rtc_variable}_now.Day());
+  sprintf(${variable_rtc_variable}_format_hour, "%02d", ${variable_rtc_variable}_now.Hour());
+  sprintf(${variable_rtc_variable}_format_minute, "%02d", ${variable_rtc_variable}_now.Minute());
+  sprintf(${variable_rtc_variable}_format_second, "%02d", ${variable_rtc_variable}_now.Second());
 
   `;
-  return code;
+};
+
+Blockly.JavaScript['rtc_timestamp_format'] = function(block) {
+  var variable_rtc_variable = Blockly.JavaScript.variableDB_.getName(block.getFieldValue('RTC_INSTANCE'), Blockly.Variables.NAME_TYPE);
+  var dropdown_rtc_timestamp_format = block.getFieldValue('RTC_TIMESTAMP_FORMAT');
+  // TODO: Assemble JavaScript into code variable.
+  
+  var code = ``;
+
+  if (dropdown_rtc_timestamp_format == 'RTC_TIMESTAMP_FORMAT_1') {
+    code = `
+    String(${variable_rtc_variable}_format_year) + 
+    "/" + 
+    String(${variable_rtc_variable}_format_month) + 
+    "/" + 
+    String(${variable_rtc_variable}_format_day) +
+    " " + 
+    String(${variable_rtc_variable}_format_hour) + 
+    ":" + 
+    String(${variable_rtc_variable}_format_minute) + 
+    ":" + 
+    String(${variable_rtc_variable}_format_second)
+    `;
+  } else if (dropdown_rtc_timestamp_format == 'RTC_TIMESTAMP_FORMAT_2') {
+    code = `
+    String(${variable_rtc_variable}_format_day) +
+    "/" + 
+    String(${variable_rtc_variable}_format_month) + 
+    "/" + 
+    String(${variable_rtc_variable}_format_year) +
+    " " + 
+    String(${variable_rtc_variable}_format_hour) + 
+    ":" + 
+    String(${variable_rtc_variable}_format_minute) + 
+    ":" + 
+    String(${variable_rtc_variable}_format_second)
+    `;
+  }
+
+  // TODO: Change ORDER_NONE to the correct strength.
+  return [code, Blockly.JavaScript.ORDER_NONE];
+};
+
+Blockly.JavaScript['rtc_get_date'] = function(block) {
+  var variable_rtc_variable = Blockly.JavaScript.variableDB_.getName(block.getFieldValue('RTC_INSTANCE'), Blockly.Variables.NAME_TYPE);
+  // TODO: Assemble JavaScript into code variable.
+  var code = ``;
+  // TODO: Change ORDER_NONE to the correct strength.
+  return [code, Blockly.JavaScript.ORDER_NONE];
+};
+
+Blockly.JavaScript['rtc_get_timestamp'] = function(block) {
+  var variable_rtc_variable = Blockly.JavaScript.variableDB_.getName(block.getFieldValue('RTC_INSTANCE'), Blockly.Variables.NAME_TYPE);
+  // TODO: Assemble JavaScript into code variable.
+  var code = '...';
+  // TODO: Change ORDER_NONE to the correct strength.
+  return [code, Blockly.JavaScript.ORDER_NONE];
+};
+
+Blockly.JavaScript['rtc_get_year'] = function(block) {
+  var variable_rtc_variable = Blockly.JavaScript.variableDB_.getName(block.getFieldValue('RTC_INSTANCE'), Blockly.Variables.NAME_TYPE);
+  // TODO: Assemble JavaScript into code variable.
+  var code = `
+  ${variable_rtc_variable}_now.Year()
+  `;
+  // TODO: Change ORDER_NONE to the correct strength.
+  return [code, Blockly.JavaScript.ORDER_NONE];
+};
+
+Blockly.JavaScript['rtc_get_month'] = function(block) {
+  var variable_rtc_variable = Blockly.JavaScript.variableDB_.getName(block.getFieldValue('RTC_INSTANCE'), Blockly.Variables.NAME_TYPE);
+  // TODO: Assemble JavaScript into code variable.
+  var code = `
+  ${variable_rtc_variable}_now.Month()
+  `;
+  // TODO: Change ORDER_NONE to the correct strength.
+  return [code, Blockly.JavaScript.ORDER_NONE];
+};
+
+Blockly.JavaScript['rtc_get_day'] = function(block) {
+  var variable_rtc_variable = Blockly.JavaScript.variableDB_.getName(block.getFieldValue('RTC_INSTANCE'), Blockly.Variables.NAME_TYPE);
+  // TODO: Assemble JavaScript into code variable.
+  var code = `
+  ${variable_rtc_variable}_now.Day()
+  `;
+  // TODO: Change ORDER_NONE to the correct strength.
+  return [code, Blockly.JavaScript.ORDER_NONE];
+};
+
+Blockly.JavaScript['rtc_get_hour'] = function(block) {
+  var variable_rtc_variable = Blockly.JavaScript.variableDB_.getName(block.getFieldValue('RTC_INSTANCE'), Blockly.Variables.NAME_TYPE);
+  // TODO: Assemble JavaScript into code variable.
+  var code = `
+  ${variable_rtc_variable}_now.Hour()
+  `;
+  // TODO: Change ORDER_NONE to the correct strength.
+  return [code, Blockly.JavaScript.ORDER_NONE];
+};
+
+Blockly.JavaScript['rtc_get_minute'] = function(block) {
+  var variable_rtc_variable = Blockly.JavaScript.variableDB_.getName(block.getFieldValue('RTC_INSTANCE'), Blockly.Variables.NAME_TYPE);
+  // TODO: Assemble JavaScript into code variable.
+  var code = `
+  ${variable_rtc_variable}_now.Minute()
+  `;
+  // TODO: Change ORDER_NONE to the correct strength.
+  return [code, Blockly.JavaScript.ORDER_NONE];
+};
+
+Blockly.JavaScript['rtc_get_second'] = function(block) {
+  var variable_rtc_variable = Blockly.JavaScript.variableDB_.getName(block.getFieldValue('RTC_INSTANCE'), Blockly.Variables.NAME_TYPE);
+  // TODO: Assemble JavaScript into code variable.
+  var code = `
+  ${variable_rtc_variable}_now.Second()
+  `;
+  // TODO: Change ORDER_NONE to the correct strength.
+  return [code, Blockly.JavaScript.ORDER_NONE];
 };
