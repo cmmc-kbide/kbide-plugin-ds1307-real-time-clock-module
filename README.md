@@ -1,1 +1,1 @@
-# ds1307-real-time-clock-module library for KB-IDE
+# ds1307-RTC-module library for KB-IDE
